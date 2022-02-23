@@ -5,9 +5,13 @@ from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import LinearRegression
 from TaxiFareModel.encoders import DistanceTransformer, TimeFeaturesEncoder
 from TaxiFareModel.utils import compute_rmse
-from TaxiFareModel.data import get_data
-from TaxiFareModel.data import clean_data
 from sklearn.model_selection import train_test_split
+from google.cloud import storage
+import joblib
+from TaxiFareModel.params import *
+from TaxiFareModel.data import *
+
+
 
 class Trainer():
     def __init__(self, X, y):
@@ -51,7 +55,6 @@ class Trainer():
         rmse = compute_rmse(y_pred, y_test)
         return rmse
 
-
 if __name__ == "__main__": # will run it using
     # get data
     df = get_data()
@@ -72,6 +75,8 @@ if __name__ == "__main__": # will run it using
     trainer.run()
 
     # evaluate
-    trainer.evaluate(X_test,y_test)
+    rmse = trainer.evaluate(X_test,y_test)
+    save_model(trainer.pipeline) #use the fitted pipeline coming from the set_pipeline
+    # can't use it directly because it is not part as the Class
 
     print('TODO')

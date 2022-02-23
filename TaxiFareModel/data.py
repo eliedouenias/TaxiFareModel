@@ -1,11 +1,14 @@
+from TaxiFareModel.params import *
 import pandas as pd
-
-AWS_BUCKET_PATH = "s3://wagon-public-datasets/taxi-fare-train.csv"
+from google.cloud import storage
+import joblib
 
 
 def get_data(nrows=10_000):
     '''returns a DataFrame with nrows from s3 bucket'''
-    df = pd.read_csv(AWS_BUCKET_PATH, nrows=nrows)
+    #df = pd.read_csv(AWS_BUCKET_PATH, nrows=nrows)
+    # old one, new one with importing the data from GCP
+    df = pd.read_csv(f"gs://{BUCKET_NAME}/{BUCKET_TRAIN_DATA_PATH}", nrows=1000)
     return df
 
 
@@ -22,3 +25,26 @@ def clean_data(df, test=False):
     df = df[df["dropoff_latitude"].between(left=40, right=42)]
     df = df[df["dropoff_longitude"].between(left=-74, right=-72.9)]
     return df
+
+
+def upload_model_to_gcp():
+        client = storage.Client()
+
+        bucket = client.bucket(BUCKET_NAME)
+
+        blob = bucket.blob(STORAGE_LOCATION)
+
+        blob.upload_from_filename('model.joblib')
+
+def save_model(pipeline):
+    """method that saves the model into a .joblib file and uploads it on Google Storage /models folder
+    HINTS : use joblib library and google-cloud-storage"""
+
+    # saving the trained model to disk is mandatory to then beeing able to upload it to storage
+    # Implement here
+    joblib.dump(pipeline, 'model.joblib')
+    print("saved model.joblib locally")
+
+    # Implement here
+    upload_model_to_gcp()
+    print(f"uploaded model.joblib to gcp cloud storage under \n => {STORAGE_LOCATION}")
