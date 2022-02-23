@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/eliedouenias/code/eliedouenias/TaxiFareModel/mlruns/1/0f140a472d8f47caaedd45b53c3c09f3/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 0f140a472d8f47caaedd45b53c3c09f3
+run_uuid: 0f140a472d8f47caaedd45b53c3c09f3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1645541705315
+status: 1
+tags: []
+user_id: unknown
